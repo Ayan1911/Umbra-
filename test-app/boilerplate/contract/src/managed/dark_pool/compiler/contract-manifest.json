@@ -1,0 +1,118 @@
+{
+  "manifest-version": "1",
+  "compiler-version": "0.34.0",
+  "language-version": "0.26.0",
+  "runtime-version": "0.19.0",
+  "compiler": {
+    "type": "directory",
+    "contract-info.json": {
+      "type": "file",
+      "size": 2877,
+      "hash": "f5ac53d1487a63da1442c16df7715e20d0cf8ab71b3c096e99106ed3fdb31f9e"
+    }
+  },
+  "contract": {
+    "type": "directory",
+    "index.d.ts": {
+      "type": "file",
+      "size": 3641,
+      "hash": "e4d08b65bcc8dd654df0eb14c1ab70c855244c9bacb7d774b4757a6795cb7fb9"
+    },
+    "index.js": {
+      "type": "file",
+      "size": 55285,
+      "hash": "f84230feca7037d49e73c54fb6359b5398e68d712055fde8c0691bcdf78bb6b3"
+    },
+    "index.js.map": {
+      "type": "file",
+      "size": 1930,
+      "hash": "9dea60b77c12e7a76746b7be6985309a2b956e24a64a67b65cc168bd2030acec"
+    }
+  },
+  "zkir": {
+    "type": "directory",
+    "commitOrder.bzkir": {
+      "type": "file",
+      "size": 102,
+      "hash": "27810b9c8720ea48b2ef5ffe50f7b9f2fbe2d79d51447f597cb1a3f77fd7afb3"
+    },
+    "commitOrder.zkir": {
+      "type": "file",
+      "size": 1462,
+      "hash": "cc6dcbe8614ce9589efef85722a27ac69b1fa3509416f636ae4e1ee0b27fe575"
+    },
+    "revealAndMatch.bzkir": {
+      "type": "file",
+      "size": 183,
+      "hash": "9904e6395f069646f628f816a4b9c682813dea6aeb45716fb1ddf4ac38d7eb32"
+    },
+    "revealAndMatch.zkir": {
+      "type": "file",
+      "size": 3001,
+      "hash": "7f80ab62f72e4fc4cd219788a040ab9f7d268bb8ee4ffbd81a895a5335adf408"
+    },
+    "settle.bzkir": {
+      "type": "file",
+      "size": 333,
+      "hash": "18a1b660776c7aebdded108d9c0349d0c05f6c57e1b3c574f15e9e7e9a56708c"
+    },
+    "settle.zkir": {
+      "type": "file",
+      "size": 5528,
+      "hash": "d471d5c27e949acd9ac6f54f3685ddd70242e44ba0b4653325704240c67a8b3e"
+    },
+    "withdraw.bzkir": {
+      "type": "file",
+      "size": 230,
+      "hash": "1490e0515526ac171649d1d79504ef39a4da9bf1de62bb2d62a76f54fa91a4ea"
+    },
+    "withdraw.zkir": {
+      "type": "file",
+      "size": 3814,
+      "hash": "da5a24c5b87360b9f7cdee1582e337b17e2f347d43a277145b7ce39445244052"
+    }
+  },
+  "keys": {
+    "type": "directory",
+    "commitOrder.prover": {
+      "type": "file",
+      "size": 146765,
+      "hash": "eb301e60deca4d0a8b8850e3b5b066d8eaf5568b92bf5bb87f2b0a7316a830da"
+    },
+    "commitOrder.verifier": {
+      "type": "file",
+      "size": 1351,
+      "hash": "2aa88685800f3912d33aea9f5546f9b90704819cd81530d66fc585eb3733aaa5"
+    },
+    "revealAndMatch.prover": {
+      "type": "file",
+      "size": 279515,
+      "hash": "5bfc23758372b1eff2b61d15a58e95e27f6b0a65055e1be11060f05ba17aed65"
+    },
+    "revealAndMatch.verifier": {
+      "type": "file",
+      "size": 1351,
+      "hash": "45d5d1aaa29e96794b71248115b8fc560d1a8926262031ce18c39fe822b22ce5"
+    },
+    "settle.prover": {
+      "type": "file",
+      "size": 147418,
+      "hash": "8cda67e4cc533f9f6d6ba4533b9a25cf6fd59edde852612b779d1ee94cac2a22"
+    },
+    "settle.verifier": {
+      "type": "file",
+      "size": 1351,
+      "hash": "874d5712deb1256fb3965cbb742a68100351ca953a5b9f7dd8120527eb2b8296"
+    },
+    "withdraw.prover": {
+      "type": "file",
+      "size": 147098,
+      "hash": "73f276adad01b8574b3a399d9875bb92b8f73c9c1bd2b4daaf46ae127ac26ae2"
+    },
+    "withdraw.verifier": {
+      "type": "file",
+      "size": 1351,
+      "hash": "8b3d4c11b5d3f38333581c06f3047132a38be81ae793fa7cdf4602ff954e2469"
+    }
+  }
+}
