@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  proof-server:
+    image: ghcr.io/midnight-ntwrk/proof-server:latest
+    ports:
+      - "6300:6300"
+    environment:
+      - NETWORK_PORT=6300
+    networks:
+      - umbra-net
+
+  midnight-node:
+    image: ghcr.io/midnight-ntwrk/midnight-node:latest
+    ports:
+      - "9944:9944"
+    networks:
+      - umbra-net
+
+networks:
+  umbra-net:
+    driver: bridge
