@@ -1,0 +1,53 @@
+name: Umbra CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Install Midnight Compact Compiler
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          # Ensure path is updated for current shell
+          export PATH="$HOME/.local/bin:$PATH"
+          compact update
+
+      - name: Build Smart Contracts
+        run: compact compile contract/src/dark_pool.compact contract/build
+
+      # We would run tests here against the contract using the local proof server
+      # - name: Start Local Proof Server & Test
+      #   run: |
+      #     docker-compose -f infra/docker-compose.yml up -d
+      #     npm run test
+
+      - name: Build Frontend
+        run: npm run build --if-present
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Deployment steps would be securely managed here, requiring
+      # DEPLOYER_MNEMONIC stored in GitHub Secrets.
+      - name: Deploy Placeholder
+        run: echo "Deploying frontend and contracts..."
