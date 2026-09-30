@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
@@ -85,15 +85,24 @@ export default function LandingPage({
     }
   };
 
-  // Auto-launch if connected
-  if (isConnected) {
-    setTimeout(onLaunch, 0);
-  }
+  // Auto-launch once connected
+  useEffect(() => {
+    if (isConnected) {
+      onLaunch();
+    }
+  }, [isConnected, onLaunch]);
+
+
+  const isLace = initialAPI && (
+    String(initialAPI.name || "").toLowerCase().includes("lace") ||
+    (typeof window !== "undefined" && window.midnight?.["mnLace"] === initialAPI)
+  );
 
   let buttonText = "LAUNCH APP";
-  if (isDetecting) buttonText = "DETECTING WALLET...";
+  if (isDetecting) buttonText = "DETECTING LACE WALLET...";
   else if (!initialAPI) buttonText = "NO WALLET FOUND";
-  else if (isConnecting) buttonText = "CONNECTING...";
+  else if (isConnecting) buttonText = "AUTHORIZING IN LACE...";
+  else if (isLace) buttonText = "AUTHORIZE LACE & LAUNCH";
   else if (initialAPI) buttonText = "CONNECT & LAUNCH";
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#020617', overflow: 'hidden' }}>
@@ -160,7 +169,7 @@ export default function LandingPage({
           
           {!isDetecting && !initialAPI && (
             <div style={{ marginTop: '1.5rem', color: '#ef4444', fontSize: '0.9rem' }}>
-              ⚠️ 1AM Wallet Extension is required but was not detected. Please install it and refresh.
+              ⚠️ Midnight Wallet Extension (Midnight Lace recommended) is required. Please enable it and refresh.
             </div>
           )}
         </motion.div>

@@ -4,3 +4,10 @@ contract/build/
 dist/
 build/
 .DS_Store
+wallet-state*.json
+*.tsbuildinfo
+test_*.ts
+test-*.ts
+print_buf.js
+
+

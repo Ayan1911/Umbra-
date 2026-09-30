@@ -18,7 +18,13 @@ export default defineConfig({
     target: 'esnext'
   },
   resolve: {
-    dedupe: ['@midnight-ntwrk/compact-js', '@midnight-ntwrk/compact-runtime']
+    dedupe: [
+      '@midnight-ntwrk/midnight-js-protocol',
+      '@midnightntwrk/ledger-v9',
+      '@midnight-ntwrk/ledger',
+      '@midnight-ntwrk/compact-js',
+      '@midnight-ntwrk/compact-runtime'
+    ]
   },
   define: {
     'process.env': {}
