@@ -1,41 +1,76 @@
-pragma language_version >= 0.26.0;
+pragma language_version >= 0.23.0;
 import CompactStandardLibrary;
 
-export ledger reserveA: Counter;
-export ledger reserveB: Counter;
+export struct Order {
+    side: Uint<32>,      // 0 for BUY (token A -> token B), 1 for SELL (token B -> token A)
+    amount: Uint<64>,    // Trade size
+    nonce: Bytes<32>     // Secret salt for privacy and replay protection
+}
+
+// Public ledger state stored on Midnight blockchain
+export ledger reserveA: Uint<64>;
+export ledger reserveB: Uint<64>;
 export ledger commitmentPool: Set<Bytes<32>>;
 export ledger nullifiers: Set<Bytes<32>>;
 
-// 1. Commit order without revealing side/amount
+// Contract constructor initializes pool with base liquidity
+constructor() {
+    reserveA = 10000;
+    reserveB = 10000;
+}
+
+// Witness function querying the trader's private local state
+witness getOrderDetails(): Order;
+
+// 1. Commit private order hash into pool without revealing side, size, or trader
 export circuit commitOrder(commitmentHash: Bytes<32>): [] {
+    assert(!commitmentPool.member(disclose(commitmentHash)), "Order already committed");
     commitmentPool.insert(disclose(commitmentHash));
 }
 
-// 2. Reveal and match (simulated here for demonstration)
-export circuit revealAndMatch(commitmentHash: Bytes<32>, side: Uint<32>, amount: Uint<16>, secret: Bytes<32>): [] {
-    // Assert hash validity (simplified mock check)
-    assert(commitmentPool.member(disclose(commitmentHash)), "Order not committed");
-    assert(!nullifiers.member(disclose(commitmentHash)), "Order already settled");
-    // Just a stub for matching logic
-}
-
-// 3. Settle (update reserves based on match results)
-export circuit settle(commitmentHash: Bytes<32>, side: Uint<32>, amount: Uint<16>): [] {
-    assert(commitmentPool.member(disclose(commitmentHash)), "Order not committed");
-    assert(!nullifiers.member(disclose(commitmentHash)), "Order already settled");
+// 2. Settle order: Proves order details via witness, verifies commitment, executes AMM swap, and records nullifier
+export circuit settleOrder(nullifier: Bytes<32>): [] {
+    const order = getOrderDetails();
+    const commitmentHash = persistentHash<Order>(order);
     
-    if (disclose(side) == 0) {
-        reserveA.increment(disclose(amount));
+    // Assert order commitment exists in the public commitment pool
+    assert(commitmentPool.member(disclose(commitmentHash)), "Order not in commitment pool");
+    
+    // Assert order has not been settled or cancelled
+    assert(!nullifiers.member(disclose(nullifier)), "Order already settled");
+    
+    // Assert that the nullifier is correctly derived from order nonce
+    const expectedNullifier = persistentHash<Bytes<32>>(order.nonce);
+    assert(nullifier == expectedNullifier, "Invalid nullifier for order");
+    
+    // Execute constant-balance AMM trade
+    if (disclose(order.side == 0)) {
+        // BUY: Deposit Token A, withdraw Token B
+        reserveA = disclose((reserveA + order.amount) as Uint<64>);
+        assert(reserveB >= order.amount, "Insufficient reserve B in pool");
+        reserveB = disclose((reserveB - order.amount) as Uint<64>);
     } else {
-        reserveB.increment(disclose(amount));
+        // SELL: Deposit Token B, withdraw Token A
+        reserveB = disclose((reserveB + order.amount) as Uint<64>);
+        assert(reserveA >= order.amount, "Insufficient reserve A in pool");
+        reserveA = disclose((reserveA - order.amount) as Uint<64>);
     }
     
-    nullifiers.insert(disclose(commitmentHash));
+    // Record nullifier to prevent double-spending
+    nullifiers.insert(disclose(nullifier));
 }
 
-// 4. Withdraw (stub for removing from pool)
-export circuit withdraw(commitmentHash: Bytes<32>): [] {
-    assert(commitmentPool.member(disclose(commitmentHash)), "Order not committed");
-    assert(!nullifiers.member(disclose(commitmentHash)), "Order already settled");
-    nullifiers.insert(disclose(commitmentHash));
+// 3. Cancel order: Allows the order creator to safely withdraw or invalidate commitment without trading
+export circuit cancelOrder(nullifier: Bytes<32>): [] {
+    const order = getOrderDetails();
+    const commitmentHash = persistentHash<Order>(order);
+    
+    assert(commitmentPool.member(disclose(commitmentHash)), "Order not in commitment pool");
+    assert(!nullifiers.member(disclose(nullifier)), "Order already settled or cancelled");
+    
+    const expectedNullifier = persistentHash<Bytes<32>>(order.nonce);
+    assert(nullifier == expectedNullifier, "Invalid nullifier for order");
+    
+    nullifiers.insert(disclose(nullifier));
 }
+
