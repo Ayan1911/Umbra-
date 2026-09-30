@@ -1,1 +1,1 @@
-{"root":["./scripts/deploy.ts"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/landingpage.tsx","./src/tradinginterface.tsx","./src/main.tsx","./src/midnight-provider.ts","./src/components/navbar.tsx","./src/hooks/usedarkpoolcontract.ts","./api/src/darkpoolapi.ts","./contract/src/witnesses.ts","./contract/src/managed/dark_pool/contract/index.d.ts","./contract/build/contract/index.d.ts"],"version":"5.9.3"}
