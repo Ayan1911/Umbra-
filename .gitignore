@@ -1,13 +1,11 @@
 node_modules/
-contract/build/
 .env
 dist/
-build/
 .DS_Store
 wallet-state*.json
 *.tsbuildinfo
 test_*.ts
 test-*.ts
 print_buf.js
-
+scripts/build/
 
