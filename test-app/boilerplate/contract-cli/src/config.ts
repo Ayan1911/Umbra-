@@ -85,3 +85,14 @@ export class TestnetRemoteConfig implements Config {
     setNetworkId(NetworkId.TestNet);
   }
 }
+
+export class PreviewRemoteConfig implements Config {
+  logDir = path.resolve(currentDir, '..', 'logs', 'preview-remote', `${new Date().toISOString()}.log`);
+  indexer = 'https://indexer.preview.midnight.network/api/v4/graphql';
+  indexerWS = 'wss://indexer.preview.midnight.network/api/v4/graphql/ws';
+  node = 'https://rpc.preview.midnight.network';
+  proofServer = 'http://127.0.0.1:6300';
+  constructor() {
+    setNetworkId(NetworkId.TestNet);
+  }
+}
